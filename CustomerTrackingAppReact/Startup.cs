@@ -1,3 +1,5 @@
+using CustomerTrackingAppReact.Persistence;
+using CustomerTrackingAppReact.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -27,6 +29,18 @@ namespace CustomerTrackingAppReact
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddSingleton<IServices, ServiceContainer>();
+            /*services.AddSingleton<IUserRepository, Persistence.Dapper.UserRepository>();
+            services.AddSingleton<ICustomerRepository, Persistence.Dapper.CustomerRepository>();
+            services.AddSingleton<ILogRepository, Persistence.Dapper.LogRepository>();*/
+            services.AddSingleton<IUserRepository, Persistence.EF.UserRepository>();
+            services.AddSingleton<ICustomerRepository, Persistence.EF.CustomerRepository>();
+            services.AddSingleton<ILogRepository, Persistence.EF.LogRepository>();
+
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<ICustomerService, CustomerService>();
+            services.AddSingleton<IViewService, ViewService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
