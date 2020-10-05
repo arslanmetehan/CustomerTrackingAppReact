@@ -10,20 +10,17 @@ using System.Threading.Tasks;
 
 namespace CustomerTrackingAppReact.Controllers
 {
-	[ApiController]
-	[Route("api/Customer")]
-	public class CustomerApiController : Controller
+	public class CustomerController : Controller
 	{
 		private readonly ICustomerService _customerService;
 		private readonly IUserService _userService;
-		public CustomerApiController(ICustomerService customerService, IUserService userService)
+		public CustomerController(ICustomerService customerService, IUserService userService)
 		{
 			_customerService = customerService;
 			_userService = userService;
 		}
 
 		[HttpGet]
-		[Route(nameof(GetCustomers))]
 		public ActionResult<ApiResponse<List<CustomerModel>>> GetCustomers()
 		{
 			try
@@ -40,7 +37,6 @@ namespace CustomerTrackingAppReact.Controllers
 			}
 		}
 		[HttpGet]
-		[Route(nameof(GetCustomersByPageNo))]
 		public ActionResult<ApiResponse<List<CustomerModel>>> GetCustomersByPageNo(int pageNo)
 		{
 			try
@@ -58,7 +54,6 @@ namespace CustomerTrackingAppReact.Controllers
 			}
 		}
 		[HttpGet]
-		[Route(nameof(GetActivitiesByCustomerId))]
 		public ActionResult<ApiResponse<List<ActivityModel>>> GetActivitiesByCustomerId(int customerId)
 		{
 			try
@@ -76,7 +71,6 @@ namespace CustomerTrackingAppReact.Controllers
 			}
 		}
 		[HttpPost]
-		[Route(nameof(CreateCustomer))]
 		public ActionResult<ApiResponse<CustomerModel>> CreateCustomer([FromBody] CreateCustomerModel model)
 		{
 			try
@@ -120,7 +114,6 @@ namespace CustomerTrackingAppReact.Controllers
 			}
 		}
 		[HttpGet]
-		[Route(nameof(GetLastActivityByCustomerId))]
 		public ActionResult<ApiResponse<ActivityModel>> GetLastActivityByCustomerId(int customerId)
 		{
 			try
@@ -138,7 +131,6 @@ namespace CustomerTrackingAppReact.Controllers
 			}
 		}
 		[HttpPost]
-		[Route(nameof(CreateActivity))]
 		public ActionResult<ApiResponse<ActivityModel>> CreateActivity([FromBody] CreateActivityModel model, decimal paymentAmount)
 		{
 			try

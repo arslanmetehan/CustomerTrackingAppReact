@@ -21,7 +21,7 @@ namespace CustomerTrackingAppReact
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSession();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -57,14 +57,14 @@ namespace CustomerTrackingAppReact
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "api/{controller}/{action}/{id?}");
             });
 
             app.UseSpa(spa =>

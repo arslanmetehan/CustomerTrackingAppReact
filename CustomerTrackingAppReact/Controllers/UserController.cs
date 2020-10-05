@@ -9,19 +9,16 @@ using System.Threading.Tasks;
 
 namespace CustomerTrackingAppReact.Controllers
 {
-	[ApiController]
-	[Route("api/User")]
-	public class UserApiController : Controller
+	public class UserController : ControllerBase
 	{
 		private readonly IUserService _userService;
-		public UserApiController(IUserService userService)
+		public UserController(IUserService userService)
 		{
 			_userService = userService;
 		}
 
 		[HttpGet]
-		[Route(nameof(GetActiveUsers))]
-		public ActionResult<ApiResponse<List<UserModel>>> GetActiveUsers()
+		public ApiResponse<List<UserModel>> GetActiveUsers()
 		{
 			try
 			{
@@ -29,16 +26,15 @@ namespace CustomerTrackingAppReact.Controllers
 
 				var response = ApiResponse<List<UserModel>>.WithSuccess(users);
 
-				return Json(response);
+				return response;
 			}
 			catch (Exception exp)
 			{
-				return Json(ApiResponse<List<UserModel>>.WithError(exp.ToString()));
+				return ApiResponse<List<UserModel>>.WithError(exp.ToString());
 			}
 		}
 		[HttpGet]
-		[Route(nameof(GetUsersByPageNo))]
-		public ActionResult<ApiResponse<List<UserModel>>> GetUsersByPageNo(int pageNo)
+		public ApiResponse<List<UserModel>> GetUsersByPageNo(int pageNo)
 		{
 			try
 			{
@@ -47,58 +43,56 @@ namespace CustomerTrackingAppReact.Controllers
 
 				var response = ApiResponse<List<UserModel>>.WithSuccess(users);
 
-				return Json(response);
+				return response;
 			}
 			catch (Exception exp)
 			{
-				return Json(ApiResponse<List<UserModel>>.WithError(exp.ToString()));
+				return ApiResponse<List<UserModel>>.WithError(exp.ToString());
 			}
 		}
 
 		[HttpPost]
-		[Route(nameof(Login))]
-		public ActionResult<ApiResponse> Login([FromBody] UserLoginModel model)
+		public ApiResponse Login([FromBody] UserLoginModel model)
 		{
 			try
 			{
 				if (!this._userService.TryLogin(model, this.HttpContext))
 				{
-					return Json(ApiResponse.WithError("Invalid Username or Password!"));
+					return ApiResponse.WithError("Invalid Username or Password!");
 				}
 
-				return Json(ApiResponse.WithSuccess());
+				return ApiResponse.WithSuccess();
 			}
 			catch (Exception exp)
 			{
-				return Json(ApiResponse.WithError(exp.ToString()));
+				return ApiResponse.WithError(exp.ToString());
 			}
 		}
 		[HttpPost]
-		[Route(nameof(CreateUser))]
-		public ActionResult<ApiResponse<UserModel>> CreateUser([FromBody] CreateUserModel model)
+		public ApiResponse<UserModel> CreateUser([FromBody] CreateUserModel model)
 		{
 			try
 			{
 				var onlineUser = this._userService.GetOnlineUser(this.HttpContext);
 				if (onlineUser == null)
 				{
-					return Json(ApiResponse<List<UserModel>>.WithError("Not authorized !"));
+					return ApiResponse<UserModel>.WithError("Not authorized !");
 				}
 				if (onlineUser.Type != 0 && model.Type == Enum.Type.Admin || onlineUser.Type != 0 && model.Type == Enum.Type.Manager || onlineUser.Type == Enum.Type.Employee)
 				{
-					return Json(ApiResponse<List<UserModel>>.WithError("Not authorized !"));
+					return ApiResponse<UserModel>.WithError("Not authorized !");
 				}
 				if (model.Username == null || model.Username == "")
 				{
-					return Json(ApiResponse<UserModel>.WithError("Username is required !"));
+					return ApiResponse<UserModel>.WithError("Username is required !");
 				}
 				if (model.Email == null || model.Email == "")
 				{
-					return Json(ApiResponse<UserModel>.WithError("Email is required !"));
+					return ApiResponse<UserModel>.WithError("Email is required !");
 				}
 				if (model.Password == null || model.Password == "")
 				{
-					return Json(ApiResponse<UserModel>.WithError("Password is required !"));
+					return ApiResponse<UserModel>.WithError("Password is required !");
 				}
 				UserModel result = null;
 
@@ -107,13 +101,13 @@ namespace CustomerTrackingAppReact.Controllers
 				var usernameControl = _userService.UsernameCounter(model.Username);
 				if (usernameControl >= 1)
 				{
-					return Json(ApiResponse<UserModel>.WithError("This Username has already exist !"));
+					return ApiResponse<UserModel>.WithError("This Username has already exist !");
 				}
 				newUser.Email = model.Email;
 				var emailControl = _userService.EmailCounter(model.Email);
 				if (emailControl >= 1)
 				{
-					return Json(ApiResponse<UserModel>.WithError("This Email has already exist !"));
+					return ApiResponse<UserModel>.WithError("This Email has already exist !");
 				}
 				newUser.Password = model.Password;
 				newUser.BirthYear = model.BirthYear;
@@ -130,26 +124,40 @@ namespace CustomerTrackingAppReact.Controllers
 				this._userService.AddNewUser(newUser);
 				result = this._userService.GetById(newUser.Id);
 
-				return Json(ApiResponse<UserModel>.WithSuccess(result));
+				return ApiResponse<UserModel>.WithSuccess(result);
 			}
 			catch (Exception exp)
 			{
-				return Json(ApiResponse<UserModel>.WithError(exp.ToString()));
+				return ApiResponse<UserModel>.WithError(exp.ToString());
 			}
 		}
+
 		[HttpGet]
-		[Route(nameof(GetOnlineUser))]
-		public ActionResult<ApiResponse<UserModel>> GetOnlineUser()
+		public ApiResponse<UserModel> GetOnlineUser()
 		{
 			try
 			{
 				var user = this._userService.GetOnlineUser(this.HttpContext);
 
-				return Json(ApiResponse<UserModel>.WithSuccess(user));
+				return ApiResponse<UserModel>.WithSuccess(user);
 			}
 			catch (Exception exp)
 			{
-				return Json(ApiResponse<UserModel>.WithError(exp.ToString()));
+				return ApiResponse<UserModel>.WithError(exp.ToString());
+			}
+		}
+		[HttpPost]
+		public ApiResponse Logout()
+		{
+			try
+			{
+				this._userService.Logout(this.HttpContext);
+
+				return ApiResponse.WithSuccess();
+			}
+			catch (Exception exp)
+			{
+				return ApiResponse.WithError(exp.ToString());
 			}
 		}
 	}

@@ -30,5 +30,10 @@ namespace CustomerTrackingAppReact.Models
 		{
 			return new ApiResponse<TData>() { Success = true, Data = data };
 		}
+
+		public static ApiResponse<TData> WithError(string message)
+		{
+			return new ApiResponse<TData>() { Success = false, ErrorMessage = message };
+		}
 	}
 }

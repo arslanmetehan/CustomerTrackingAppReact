@@ -1,0 +1,90 @@
+﻿
+.side-bar
+{
+    float:left;
+    min-width:200px;
+    padding:20px;
+    margin-right:20px;
+    height:500px;
+   
+}
+.menu-item
+{
+    font-size:14px;
+}
+
+
+
+
+.container {
+    
+   
+}
+.user-list-top
+{
+    position:relative;
+    min-width:500px;
+}
+.user-list-top h1
+{
+    padding-left:50px;
+}
+#user-create-form
+{
+    position:relative;
+    float:left;
+}
+.user-info {
+    float: left;
+    padding: 15px;
+    min-width: 150px;
+    font-size:14px;
+    text-align:center;
+}
+.user-info.profile-btn
+{
+    display:block;
+}
+.user-info-titles div {
+    float: left;
+    padding: 15px;
+    min-width: 150px;
+    color: #ff6a00;
+    font-family: roboto;
+    text-align: center;
+}
+.user-title {
+    color: #aaaaaa;
+}
+.user-modal-btn {
+    display: block;
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    background: #aaaaaa;
+    color: #ff6a00;
+    border: 0px;
+    outline: 0px;
+    font-family: roboto;
+    background: none;
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: center;
+    border: 1px solid #888;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.user-modal-btn:hover
+{
+    transition:0.1s;
+    color:#20fbee;
+    background:white;
+    border:1px solid white;
+    box-shadow:0px 0px 4px;
+
+}
+.user-list a
+{
+    color:#0b54d8;
+}
